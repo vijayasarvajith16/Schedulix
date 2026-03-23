@@ -68,6 +68,8 @@ app.get(/^(?!\/api).*/, (req, res) => {
     const htmlPath = path.join(__dirname, 'public', 'index.html');
     if (fs.existsSync(htmlPath)) {
         res.sendFile(htmlPath);
+    } else if (process.env.NODE_ENV === 'production') {
+        res.status(500).send('Frontend build not found. The Render build step failed or the public folder is missing.');
     } else {
         // In dev: redirect to React dev server
         res.redirect('http://localhost:3000');
