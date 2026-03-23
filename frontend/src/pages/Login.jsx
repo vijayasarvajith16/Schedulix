@@ -90,7 +90,7 @@ const Login = () => {
                                     </button>
                                     <div className="text-center mt-3">
                                         <small className="text-muted">
-                                            New here? <Link to="/register" className="text-primary text-decoration-none fw-semibold">Create an account</Link>
+                                            New here? <a href='https://schedulix-register.netlify.app/register' className="text-primary text-decoration-none fw-semibold">Create an account</a>
                                         </small>
                                     </div>
                                 </form>
