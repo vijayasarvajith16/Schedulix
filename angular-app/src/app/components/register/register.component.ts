@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
     selector: 'app-register',
@@ -23,8 +24,8 @@ export class RegisterComponent {
     success = '';
     loading = false;
 
-    // Relative path — Angular dev proxy forwards /api/* → http://localhost:5000/api
-    private apiBase = '/api';
+    // Use environment URL for API requests
+    private apiBase = environment.apiUrl;
 
     constructor(private http: HttpClient) { }
 
@@ -39,7 +40,7 @@ export class RegisterComponent {
                 this.loading = false;
                 this.success = 'Account created! Redirecting to login...';
                 setTimeout(() => {
-                    window.location.href = 'http://localhost:3000/login';
+                    window.location.href = `${environment.reactAppUrl}/login`;
                 }, 2000);
             },
             error: (err) => {
@@ -54,6 +55,6 @@ export class RegisterComponent {
     }
 
     goToLogin() {
-        window.location.href = 'http://localhost:3000/login';
+        window.location.href = `${environment.reactAppUrl}/login`;
     }
 }

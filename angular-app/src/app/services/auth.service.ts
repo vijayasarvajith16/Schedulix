@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
     providedIn: 'root'
@@ -68,8 +69,8 @@ export class AuthService {
     logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        // Redirect back to the React app login page running on port 3000
+        // Redirect back to the React app login page
         // Passed with ?logout=true so the React app forcibly overrides any active sessions.
-        window.location.href = 'http://localhost:3000/login?logout=true';
+        window.location.href = `${environment.reactAppUrl}/login?logout=true`;
     }
 }

@@ -1,4 +1,5 @@
 import { inject } from '@angular/core';
+import { environment } from '../../environments/environment.development';
 import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
@@ -25,9 +26,12 @@ export const authGuard: CanActivateFn = (route, state) => {
         if (userData && (userData.role === 'faculty' || userData.role === 'student')) {
             return true;
         }
+
+        // User has a token but does not have the required role
+        return false;
     }
 
-    // Not authorized, redirect to login page (which resides in the React app at port 3000)
-    window.location.href = 'http://localhost:3000/login';
+    // Not authenticated
+    window.location.href = `${environment.reactAppUrl}/login`;
     return false;
 };

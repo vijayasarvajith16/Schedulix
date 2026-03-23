@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
+import { environment } from '../environments/environment.development';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class App {
   authService = inject(AuthService);
   router = inject(Router);
+  reactAppUrl = environment.reactAppUrl;
 
   get isRegisterPage(): boolean {
     return this.router.url === '/register';

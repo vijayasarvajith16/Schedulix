@@ -40,14 +40,14 @@
 
         <!-- Nav Links -->
         <div class="flex-grow-1 py-3 overflow-auto">
-            <a href="http://localhost:4200/faculty-dashboard"
+            <a [href]="reactAppUrl + '/my-timetable'"
                 class="d-flex align-items-center px-4 py-2 text-white text-decoration-none"
                 style="background: rgba(102,126,234,0.3); border-right: 3px solid #667eea; transition: all 0.2s; font-size: 0.88rem;">
                 <i class="bi bi-person-badge me-3" style="font-size: 1rem; color: #667eea;"></i>
                 <span style="color: white;">My Timetable</span>
             </a>
             <!-- Link back to React app Batch View -->
-            <a href="http://localhost:3000/timetable"
+            <a [href]="reactAppUrl + '/timetable'"
                 class="d-flex align-items-center px-4 py-2 text-white text-decoration-none"
                 style="background: transparent; border-right: 3px solid transparent; transition: all 0.2s; font-size: 0.88rem;">
                 <i class="bi bi-table me-3" style="font-size: 1rem; color: rgba(255,255,255,0.7);"></i>
