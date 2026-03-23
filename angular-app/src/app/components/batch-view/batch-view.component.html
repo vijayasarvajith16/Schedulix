@@ -1,0 +1,126 @@
+<div class="page-wrapper">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Batch Timetable View</h1>
+            <p class="page-subtitle">Select a batch to view the weekly schedule</p>
+        </div>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+            @if (selectedBatch && timetable.length > 0) {
+            <button class="btn-export" (click)="exportCSV()">
+                <i class="bi bi-download me-1"></i> Export CSV
+            </button>
+            }
+            <button class="btn-logout" (click)="logout()">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Error Alert -->
+    @if (error) {
+    <div class="alert alert-danger rounded-3 shadow-sm mb-3">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+    </div>
+    }
+
+    <!-- Batch Selector -->
+    <div class="selector-card">
+        <div class="row align-items-end g-3">
+            <div class="col-md-6">
+                <label class="selector-label">Select Batch</label>
+                @if (loadingParams) {
+                <div class="d-flex align-items-center gap-2 text-muted small">
+                    <div class="spinner-border spinner-border-sm"></div> Loading batches…
+                </div>
+                } @else {
+                <select class="batch-select" [(ngModel)]="selectedBatch" (change)="onBatchSelect()">
+                    <option value="">— Choose a batch —</option>
+                    @for (b of batches; track b._id) {
+                    <option [value]="b._id">{{ b.name }}</option>
+                    }
+                </select>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Timetable Grid -->
+    @if (loadingGrid) {
+    <div class="spinner-box">
+        <div class="spinner-ring"></div>
+        <p class="text-muted mt-3 small">Loading timetable…</p>
+    </div>
+    } @else if (selectedBatch && timetable.length > 0) {
+    <div>
+        <div class="timetable-card table-responsive">
+            <table class="tt-table">
+                <thead>
+                    <tr>
+                        <th class="period-header">Period&nbsp;↓ &nbsp;Day&nbsp;→</th>
+                        @for (d of DAYS; track d) {
+                        <th>{{ d }}</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (p of PERIODS; track p) {
+                    <tr>
+                        <td class="period-cell">
+                            <div class="period-label">Period</div>
+                            <div class="period-number">{{ p }}</div>
+                        </td>
+                        @for (d of DAYS; track d) {
+                        <td>
+                            @if (getSlot(d, p); as slot) {
+                            <div class="slot-card" [style.background]="getColor(slot)">
+                                <div class="slot-subject">
+                                    {{ slot.subjectId?.subjectName }}
+                                    @if (slot.type) {
+                                    <span class="slot-type-badge">{{ slot.type }}</span>
+                                    }
+                                </div>
+                                <div class="slot-faculty">
+                                    <i class="bi bi-person-fill"></i>
+                                    <span>{{ slot.facultyId?.name || '—' }}</span>
+                                </div>
+                            </div>
+                            } @else {
+                            <span class="empty-cell">—</span>
+                            }
+                        </td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend-card">
+            <div class="legend-title">Subject Legend</div>
+            <div class="d-flex flex-wrap gap-2">
+                @for (key of subjectKeys; track key) {
+                @if (getSubjectName(key); as name) {
+                <span class="legend-badge" [style.background]="subjectColors[key]">{{ name }}</span>
+                }
+                }
+            </div>
+        </div>
+    </div>
+
+    } @else if (selectedBatch && !loadingGrid) {
+    <div class="placeholder-box">
+        <i class="bi bi-calendar-x"></i>
+        <p class="mb-0 fw-semibold">No timetable generated for this batch yet.</p>
+    </div>
+
+    } @else {
+    <div class="placeholder-box">
+        <i class="bi bi-arrow-up-circle"></i>
+        <p class="mb-0 fw-semibold">Select a batch above to view its timetable</p>
+    </div>
+    }
+
+</div>

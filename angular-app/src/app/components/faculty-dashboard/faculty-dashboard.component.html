@@ -1,0 +1,112 @@
+<div>
+    <!-- Header -->
+    <div class="mb-4 mt-2">
+        <h2 class="fw-bold mb-1">My Faculty Timetable</h2>
+        <p class="text-muted mb-0">
+            @if (facultyDoc) {
+            {{ facultyDoc.name }} &mdash; {{ facultyDoc.department }}
+            } @else {
+            View your complete weekly teaching schedule
+            }
+        </p>
+    </div>
+
+    <!-- Error Block -->
+    @if (error) {
+    <div class="alert alert-danger shadow-sm border-0 d-flex align-items-center">
+        <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
+        <div>{{ error }}</div>
+    </div>
+    }
+
+    <!-- Loading Indicator -->
+    @if (loading) {
+    <div class="text-center py-5">
+        <div class="spinner-border" style="color: #4facfe; width: 3rem; height: 3rem;"></div>
+    </div>
+    }
+
+    <!-- Timetable Content -->
+    @if (!loading && timetable && timetable.length > 0) {
+
+    <!-- Stats Badge Component -->
+    <div class="d-flex gap-3 mb-4 flex-wrap">
+        <div class="badge px-3 py-2 fs-6 text-white shadow-sm"
+            style="background: linear-gradient(135deg,#4facfe,#00f2fe); border-radius: 10px;">
+            <i class="bi bi-calendar-check me-2"></i>{{ timetable.length }} total classes/week
+        </div>
+        <div class="badge bg-light text-dark px-3 py-2 fs-6 shadow-sm border" style="border-radius: 10px;">
+            <i class="bi bi-clock me-2 text-warning"></i>{{ timetable.length }} hrs/week
+        </div>
+    </div>
+
+    <!-- The Timetable Grid -->
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-bordered mb-0 text-center" style="min-width: 700px;">
+                <thead>
+                    <tr style="background: linear-gradient(135deg,#4facfe,#00f2fe);">
+                        <th class="text-white py-3 shadow-none" style="width: 120px; border-bottom: none;">Period</th>
+                        @for (d of DAYS; track d) {
+                        <th class="text-white py-3 fw-bold shadow-none" style="border-bottom: none;">
+                            {{ d }}
+                        </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (p of PERIODS; track p) {
+                    <tr>
+                        <td class="fw-bold align-middle"
+                            style="background: linear-gradient(135deg,#4facfe15,#00f2fe15); color: #4facfe; border-color: rgba(0,0,0,0.05);">
+                            P{{ p }}
+                        </td>
+
+                        @for (d of DAYS; track d) {
+                        <td class="p-1 align-middle border-light">
+                            <!-- Fetch slot dynamically using a method. -->
+                            @if (getSlot(d, p); as slot) {
+                            <div class="rounded-3 p-2 text-white text-start shadow-sm"
+                                style="background: linear-gradient(135deg,#4facfe,#00f2fe); min-height: 60px; transition: transform 0.2s;">
+                                <div class="fw-semibold text-truncate" style="font-size: 0.75rem;">
+                                    {{ slot.subjectId?.subjectName }}
+                                </div>
+                                <div style="font-size: 0.65rem; opacity: 0.9;">
+                                    <i class="bi bi-grid-fill me-1"></i>Batch {{ slot.batchId?.name }}
+                                </div>
+                            </div>
+                            } @else {
+                            <span class="text-muted opacity-25">—</span>
+                            }
+                        </td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Batch Summary Below Table -->
+    <div class="mt-4">
+        <h6 class="fw-bold mb-3 text-muted">Batch-wise Summary</h6>
+        <div class="d-flex flex-wrap gap-2">
+            @for (batch of getBatches(); track batch) {
+            <span class="badge px-3 py-2 fw-semibold"
+                style="background: linear-gradient(135deg,#4facfe22,#00f2fe22); color: #4facfe; border: 1px solid #4facfe44; border-radius: 8px;">
+                Batch {{ batch }}: {{ getBatchClassCount(batch) }} classes
+            </span>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- Empty State -->
+    @if (!loading && (!timetable || timetable.length === 0) && !error) {
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-calendar-x fs-1 d-block mb-3 opacity-25"></i>
+        <h5 class="fw-semibold">No Timetable Assigned</h5>
+        <p class="small text-muted">You do not have any classes scheduled for the selected semester/section.</p>
+    </div>
+    }
+</div>

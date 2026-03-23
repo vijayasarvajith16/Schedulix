@@ -1,0 +1,76 @@
+<div class="register-wrapper">
+    <div class="register-card-container">
+        <div class="register-card">
+
+            <!-- Header -->
+            <div class="card-header">
+                <div class="icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="white" viewBox="0 0 16 16">
+                        <path
+                            d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                        <path fill-rule="evenodd"
+                            d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+                    </svg>
+                </div>
+                <h3>Create Account</h3>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body">
+                <!-- Error Alert -->
+                <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+                <!-- Success Alert -->
+                <div class="alert alert-success" *ngIf="success">{{ success }}</div>
+
+                <form (ngSubmit)="handleSubmit($event)">
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" placeholder="Your full name" [(ngModel)]="form.name"
+                            name="name" required />
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" placeholder="your@email.com" [(ngModel)]="form.email"
+                            name="email" required />
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" placeholder="Min 6 characters"
+                            [(ngModel)]="form.password" name="password" required />
+                    </div>
+
+                    <!-- Role -->
+                    <div class="form-group mb-extra">
+                        <label class="form-label">Role</label>
+                        <select class="form-control form-select" [(ngModel)]="form.role" name="role">
+                            <option value="admin">Admin</option>
+                            <option value="faculty">Faculty</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit" [disabled]="loading">
+                        <span *ngIf="loading" class="spinner"></span>
+                        <span>{{ loading ? 'Creating...' : 'Create Account' }}</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer">
+                <small>
+                    Already have an account?
+                    <a (click)="goToLogin()" class="signin-link">Sign In</a>
+                </small>
+            </div>
+
+        </div>
+    </div>
+</div>
