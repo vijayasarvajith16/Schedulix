@@ -12,7 +12,7 @@ const generateTimetable = (mappings) => {
     const batchSlots = {};
     const timetableEntries = [];
 
-  
+
     const assignments = [];
     for (const mapping of mappings) {
         const subject = mapping.subjectId;
@@ -29,7 +29,7 @@ const generateTimetable = (mappings) => {
             });
         } else if (category === 'Lab (L)') {
             let remainingLab = subject.labHours > 0 ? subject.labHours : subject.hoursPerWeek || 3;
-    
+
             while (remainingLab > 0) {
                 let chunk = remainingLab > 4 ? 2 : remainingLab;
                 assignments.push({
@@ -80,7 +80,7 @@ const generateTimetable = (mappings) => {
     for (const assignment of sortedAssignments) {
         const { type, facultyId, subjectId, batchId, hours } = assignment;
 
-    
+
         if (!facultySlots[facultyId]) facultySlots[facultyId] = {};
         if (!batchSlots[batchId]) batchSlots[batchId] = {};
 
@@ -109,12 +109,12 @@ const generateTimetable = (mappings) => {
 
             if (slotsAssigned < hours) {
                 console.warn(
-                    `⚠️  Theory: Could only assign ${slotsAssigned}/${hours} slots for ` +
+                    `Theory: Could only assign ${slotsAssigned}/${hours} slots for ` +
                     `batch ${batchId} / faculty ${facultyId} / subject ${subjectId}`
                 );
             }
         } else if (type === 'lab') {
-           
+
             const sessions = [[1, 2], [3, 4], [5, 6, 7, 8]];
             let scheduled = false;
 
@@ -132,7 +132,7 @@ const generateTimetable = (mappings) => {
 
                     if (session.length < hours) continue;
 
-                    // Sliding window within the session
+                
                     for (let i = 0; i <= session.length - hours; i++) {
                         const block = session.slice(i, i + hours);
 
@@ -166,7 +166,7 @@ const generateTimetable = (mappings) => {
                                 batchSlots[batchId][day][p] = true;
                             }
                             scheduled = true;
-                            break; // break inner loop, found a valid start index
+                            break; 
                         }
                     }
                 }
