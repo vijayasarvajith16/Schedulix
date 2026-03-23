@@ -1,0 +1,59 @@
+/* Global Styles for TimetableBot */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f4f6fb;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #667eea; border-radius: 3px; }
+
+/* Card hover utility */
+.card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+
+/* Badge pill tweaks */
+.badge { font-weight: 600; }
+
+/* Table striping override */
+.table > :not(caption) > * > * {
+  padding: 0.85rem 1rem;
+}
+
+/* Timetable cell */
+.tt-cell {
+  min-height: 75px;
+  font-size: 0.75rem;
+}
+
+/* Form control focus */
+.form-control:focus, .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.2);
+}
+
+/* Animation: fade in */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  animation: fadeInUp 0.3s ease both;
+}
+
+/* Input group button no border left */
+.input-group .form-control.border-start-0 {
+  border-left: none !important;
+}
