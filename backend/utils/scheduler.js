@@ -1,15 +1,3 @@
-/**
- * Conflict-free Timetable Scheduling Algorithm
- * Generates timetable for all batches based on mappings.
- * 
- * Constraints:
- * - 5 working days × 8 periods = 40 slots per batch
- * - A faculty cannot teach two batches at the same time
- * - A batch cannot have two subjects at the same time
- * - Subjects must meet required weekly hours
- * - Labs must be placed as a contiguous block within one of three non-breakable sessions: [1–2], [3–4], [5–8]
- */
-
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 const PERIODS = [1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -19,14 +7,12 @@ const PERIODS = [1, 2, 3, 4, 5, 6, 7, 8];
  * @returns {Array} Array of timetable slot objects
  */
 const generateTimetable = (mappings) => {
-    // Track occupied slots
-    // facultySlots[facultyId][day][period] = true if occupied
-    // batchSlots[batchId][day][period] = true if occupied
+
     const facultySlots = {};
     const batchSlots = {};
     const timetableEntries = [];
 
-    // Build list of assignments: each mapping expanded by hoursPerWeek
+  
     const assignments = [];
     for (const mapping of mappings) {
         const subject = mapping.subjectId;
@@ -43,7 +29,7 @@ const generateTimetable = (mappings) => {
             });
         } else if (category === 'Lab (L)') {
             let remainingLab = subject.labHours > 0 ? subject.labHours : subject.hoursPerWeek || 3;
-            // Split into manageable contiguous blocks if needed
+    
             while (remainingLab > 0) {
                 let chunk = remainingLab > 4 ? 2 : remainingLab;
                 assignments.push({
@@ -76,14 +62,14 @@ const generateTimetable = (mappings) => {
         }
     }
 
-    // Shuffle assignments: we prioritize Labs first to ensure their strict constraints fit!
+
     const labsFirst = assignments.filter(a => a.type === 'lab');
     const theorySecond = assignments.filter(a => a.type === 'theory');
     shuffleArray(labsFirst);
     shuffleArray(theorySecond);
     const sortedAssignments = [...labsFirst, ...theorySecond];
 
-    // Generate all available (day, period) combinations for theory slots
+
     const allSlots = [];
     for (const day of DAYS) {
         for (const period of PERIODS) {
@@ -94,7 +80,7 @@ const generateTimetable = (mappings) => {
     for (const assignment of sortedAssignments) {
         const { type, facultyId, subjectId, batchId, hours } = assignment;
 
-        // Initialize tracking maps
+    
         if (!facultySlots[facultyId]) facultySlots[facultyId] = {};
         if (!batchSlots[batchId]) batchSlots[batchId] = {};
 
@@ -128,7 +114,7 @@ const generateTimetable = (mappings) => {
                 );
             }
         } else if (type === 'lab') {
-            // Sessions allowed: [1,2], [3,4], [5,6,7,8]
+           
             const sessions = [[1, 2], [3, 4], [5, 6, 7, 8]];
             let scheduled = false;
 
@@ -198,7 +184,7 @@ const generateTimetable = (mappings) => {
     return timetableEntries;
 };
 
-// Fisher-Yates shuffle
+
 const shuffleArray = (arr) => {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

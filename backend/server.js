@@ -44,7 +44,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(logger);
 
 // ── Static File Serving ──────────────────────────────────────────────────────
-// Serve React build files
+// Serve React build (copied to backend/public during build)
 app.use(express.static(path.join(__dirname, 'public')));
 // Serve uploaded/public assets
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
@@ -62,25 +62,15 @@ app.get('/api/health', (req, res) => {
     res.status(200).json({ success: true, message: 'Timetable API is running', timestamp: new Date() });
 });
 
-// ── Redirect root → React App (res.redirect()) ──────────────────────────────
-app.get('/', (req, res) => {
+// ── Serve React for all non-API routes (client-side routing support) ─────────
+const fs = require('fs');
+app.get(/^(?!\/api).*/, (req, res) => {
     const htmlPath = path.join(__dirname, 'public', 'index.html');
-    const fs = require('fs');
-    if (fs.existsSync(htmlPath)) {
-        res.sendFile(htmlPath);                       // res.sendFile()
-    } else {
-        res.redirect('http://localhost:3000');        // res.redirect()
-    }
-});
-
-// ── Catch-all: serve React for any unknown route ─────────────────────────────
-app.get(/.*/, (req, res) => {
-    const htmlPath = path.join(__dirname, 'public', 'index.html');
-    const fs = require('fs');
     if (fs.existsSync(htmlPath)) {
         res.sendFile(htmlPath);
     } else {
-        res.status(404).json({ success: false, message: 'Route not found' });
+        // In dev: redirect to React dev server
+        res.redirect('http://localhost:3000');
     }
 });
 

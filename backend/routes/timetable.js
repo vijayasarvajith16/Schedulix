@@ -7,9 +7,7 @@ const Mapping = require('../models/Mapping');
 const { protect, authorize } = require('../middleware/auth');
 const { generateTimetable } = require('../utils/scheduler');
 
-// @route   GET /api/timetable
-// @desc    Get timetable with query filters (batchId, facultyId)
-// @access  Private
+
 router.get('/', protect, async (req, res, next) => {
     try {
         const { batchId, facultyId, day } = req.query;
@@ -31,12 +29,10 @@ router.get('/', protect, async (req, res, next) => {
     }
 });
 
-// @route   POST /api/timetable/generate
-// @desc    Generate timetable from all mappings - insertMany(), deleteMany()
-// @access  Private/Admin
+
 router.post('/generate', protect, authorize('admin'), async (req, res, next) => {
     try {
-        // Fetch all mappings with populated sub-docs
+ 
         const mappings = await Mapping.find({})
             .populate('facultyId', 'name')
             .populate('subjectId', 'subjectName hoursPerWeek category theoryHours labHours')
@@ -47,7 +43,7 @@ router.post('/generate', protect, authorize('admin'), async (req, res, next) => 
             throw new Error('No mappings found. Please assign faculty to subjects/batches first.');
         }
 
-        // Run scheduling algorithm
+  
         const entries = generateTimetable(mappings);
 
         if (entries.length === 0) {
