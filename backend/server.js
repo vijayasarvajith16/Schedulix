@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));    // express.urlencoded()
 
 // ── CORS ────────────────────────────────────────────────────────────────────
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:4200', 'http://localhost:55608'],
+    origin: ['http://localhost:3000', 'http://localhost:4200', 'http://localhost:55608', 'https://schedulix-register.netlify.app'],
     credentials: true,
 }));
 
